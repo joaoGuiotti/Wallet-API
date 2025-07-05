@@ -1,0 +1,147 @@
+@endpoint = http://127.0.0.1
+@port = 8081
+@Wallet_HostAddress = http://127.0.0.1:8081
+
+GET {{Wallet_HostAddress}}/weatherforecast/
+Accept: application/json
+###
+
+### Criar novo Client
+# @name createClient
+POST {{Wallet_HostAddress}}/Client
+Content-Type: application/json
+
+{
+  "name": "Johnny",
+  "email": "johnny@email.com"
+}
+
+###
+@clientId = {{createClient.response.body.data.id}}
+
+### Buscar Client Por ID
+GET {{Wallet_HostAddress}}/Client/{{clientId}}
+Accept: application/json
+
+
+### Criar nova Account
+# @name createAccount
+POST {{Wallet_HostAddress}}/Account
+Content-Type: application/json
+
+{
+  "clientId": "{{clientId}}",
+  "balance": 100.0
+}
+###
+@accountId = {{createAccount.response.body.data.id}}
+
+### Buscar Account Por ID
+GET {{Wallet_HostAddress}}/Account/{{accountId}}
+Content-Type: application/json
+
+### Consultar Balance Atualizado
+GET {{Wallet_HostAddress}}/Account/balances/{{accountId}}
+Content-Type: application/json
+
+### Creditar Account
+POST {{Wallet_HostAddress}}/Account/Credit
+Content-Type: application/json
+
+{
+  "accountId": "{{accountId}}",
+  "amount": 22
+}
+
+### Debit Accunt
+POST {{Wallet_HostAddress}}/Account/Debit
+Content-Type: application/json
+
+{
+  "accountId": "{{accountId}}",
+  "amount": 23.50
+}
+
+### Criar nova Transaction
+# ==================================================
+# KAFKA TESTS - Consumer de TransactionCreatedEvent
+# ==================================================
+# # Para testar o consumer de Kafka:
+
+# @name createTransaction
+POST {{Wallet_HostAddress}}/Transaction
+Content-Type: application/json
+
+{
+  "accountFromId": "00000000-0000-0000-0000-000000000001",
+  "accountToId": "00000000-0000-0000-0000-000000000002",
+  "amount": 100
+}
+
+###
+@trasactionId = {{createTransaction.response.body.data.id}}
+
+### 
+# ===================================================
+# CONSULTAR BALANCE ATUALIZADO
+# ===================================================
+GET {{Wallet_HostAddress}}/Account/balances/00000000-0000-0000-0000-000000000001
+Content-Type: application/json
+
+
+
+### Get Transaction 
+GET {{Wallet_HostAddress}}/Transaction/{{trasactionId}}
+Content-Type: application/json
+
+###
+# =====================================
+# KAFKA TESTS - Consumer de TransactionCreatedEvent
+# =====================================
+
+### Enviar evento único de TransactionCreated
+POST {{Wallet_HostAddress}}/api/kafkatest/send-transaction-created-event
+Content-Type: application/json
+
+{
+  "transactionId": "123e4567-e89b-12d3-a456-426614174001"
+}
+
+### Enviar evento com ID gerado automaticamente
+POST {{Wallet_HostAddress}}/api/kafkatest/send-transaction-created-event
+Content-Type: application/json
+
+{
+}
+
+### Enviar múltiplos eventos (5 eventos)
+POST {{Wallet_HostAddress}}/api/kafkatest/send-multiple-events/5
+Content-Type: application/json
+
+### Enviar múltiplos eventos (10 eventos)
+POST {{Wallet_HostAddress}}/api/kafkatest/send-multiple-events/10
+Content-Type: application/json
+
+### Teste de carga - 50 eventos
+POST {{Wallet_HostAddress}}/api/kafkatest/send-multiple-events/50
+Content-Type: application/json
+
+###
+# =====================================
+# KAFKA TESTS - Instruções de uso
+# =====================================
+# 
+# Para testar o consumer de Kafka:
+# 1. Certifique-se que o Kafka está rodando (localhost:9092)
+# 2. Execute a API Wallet
+# 3. Execute qualquer uma das chamadas acima ou a chama de "createTransaction"
+# 4. Verifique os logs da aplicação para ver o consumer processando os eventos
+# 
+# Logs esperados:
+# - "Received message: {...}"
+# - "🎉 Transaction {id} was created successfully!"
+# - "✅ Transaction {id} event processed successfully!"
+# 
+# O consumer está configurado para o tópico: "transaction-created"
+# Grupo de consumo: "wallet-consumer-group-dev" (development)
+#

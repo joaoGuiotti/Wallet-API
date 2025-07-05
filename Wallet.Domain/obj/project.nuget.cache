@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "qdOuSu7YUQ4=",
+  "success": true,
+  "projectFilePath": "C:\\dev\\Wallet\\Wallet.Domain\\Wallet.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\joaoo\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
