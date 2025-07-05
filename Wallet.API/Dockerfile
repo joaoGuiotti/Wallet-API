@@ -11,7 +11,7 @@ RUN dotnet publish "Wallet.API/Wallet.API.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
-COPY ./entrypoint.sh .
+COPY ./scripts/entrypoint.sh .
 RUN chmod +x ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 # ENTRYPOINT ["dotnet", "Wallet.API.dll"]

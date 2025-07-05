@@ -105,12 +105,13 @@ public class KafkaConsumer : IKafkaConsumer, IDisposable
         }
     }
 
-    private async Task ProcessTransactionCreatedEvent(TransactionCreatedEvent transactionEvent)
+    private Task ProcessTransactionCreatedEvent(TransactionCreatedEvent transactionEvent)
     {
         _logger.LogInformation($"🎉 Transaction {transactionEvent.TransactionId} was created successfully!");
         _logger.LogInformation($"Event timestamp: {DateTime.UtcNow}");
         
         _logger.LogInformation($"✅ Transaction {transactionEvent.TransactionId} event processed successfully!");
+        return Task.CompletedTask;
     }
 
     private IConsumer<Ignore, string> CreateConsumerBuild(IConfiguration configuration)
