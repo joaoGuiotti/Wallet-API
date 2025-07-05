@@ -112,18 +112,6 @@ Content-Type: application/json
 {
 }
 
-### Enviar múltiplos eventos (5 eventos)
-POST {{Wallet_HostAddress}}/api/kafkatest/send-multiple-events/5
-Content-Type: application/json
-
-### Enviar múltiplos eventos (10 eventos)
-POST {{Wallet_HostAddress}}/api/kafkatest/send-multiple-events/10
-Content-Type: application/json
-
-### Teste de carga - 50 eventos
-POST {{Wallet_HostAddress}}/api/kafkatest/send-multiple-events/50
-Content-Type: application/json
-
 ###
 # =====================================
 # KAFKA TESTS - Instruções de uso
@@ -132,7 +120,7 @@ Content-Type: application/json
 # Para testar o consumer de Kafka:
 # 1. Certifique-se que o Kafka está rodando (localhost:9092)
 # 2. Execute a API Wallet
-# 3. Execute qualquer uma das chamadas acima ou a chama de "createTransaction"
+# 3. Execute qualquer a chamada de "createTransaction"
 # 4. Verifique os logs da aplicação para ver o consumer processando os eventos
 # 
 # Logs esperados:
@@ -140,6 +128,6 @@ Content-Type: application/json
 # - "🎉 Transaction {id} was created successfully!"
 # - "✅ Transaction {id} event processed successfully!"
 # 
-# O consumer está configurado para o tópico: "transaction-created"
+# O consumer está configurado para o tópico: "transactions"
 # Grupo de consumo: "wallet-consumer-group-dev" (development)
 #

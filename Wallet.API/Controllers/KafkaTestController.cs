@@ -29,7 +29,7 @@ public class KafkaTestController : ControllerBase
         try
         {
             var transactionEvent = new TransactionCreatedEvent(request.TransactionId ?? Guid.NewGuid());
-            var topic = _configuration.GetValue<string>("Kafka:Topics:TransactionCreated") ?? "transaction-created";
+            var topic = _configuration.GetValue<string>("Kafka:Topics:Transactions");
 
             var message = JsonSerializer.Serialize(transactionEvent);
 
@@ -58,7 +58,7 @@ public class KafkaTestController : ControllerBase
         try
         {
             var events = new List<object>();
-            var topic = _configuration.GetValue<string>("Kafka:Topics:TransactionCreated") ?? "transaction-created";
+            var topic = _configuration.GetValue<string>("Kafka:Topics:Transactions");
 
             for (int i = 0; i < count; i++)
             {

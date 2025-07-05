@@ -21,7 +21,7 @@ public class KafkaConsumer : IKafkaConsumer, IDisposable
     {
         _consumer = CreateConsumerBuild(configuration);
         _logger = logger;
-        _topicName = configuration.GetValue<string>("Kafka:Topics:TransactionCreated") ?? "transaction-created";
+        _topicName = configuration.GetValue<string>("Kafka:Topics:Transactions") ?? "";
         _cancellationTokenSource = new CancellationTokenSource();
     }
 

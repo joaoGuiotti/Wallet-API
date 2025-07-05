@@ -40,7 +40,7 @@ Controller de teste em `Wallet.API\Controllers\KafkaTestController.cs` com endpo
       "ClientId": "wallet-consumer"
     },
     "Topics": {
-      "TransactionCreated": "transaction-created"
+      "Transactions": "transactions"
     }
   }
 }
@@ -60,7 +60,7 @@ Controller de teste em `Wallet.API\Controllers\KafkaTestController.cs` com endpo
       "ClientId": "wallet-consumer-dev"
     },
     "Topics": {
-      "TransactionCreated": "transaction-created"
+      "Transactions": "transactions"
     }
   }
 }
@@ -77,49 +77,13 @@ Controller de teste em `Wallet.API\Controllers\KafkaTestController.cs` com endpo
 
 Para uma experiência completa de monitoramento, acesse o Confluent Control Center:
 - **URL:** http://localhost:9021
-- **Ver tópicos:** Topics → transaction-created
+- **Ver tópicos:** Topics → transactions
 - **Monitorar consumer:** Consumers → wallet-consumer-group
-- **Inspecionar mensagens:** Topics → transaction-created → Messages
+- **Inspecionar mensagens:** Topics → transactions → Messages
 
 *Consulte o arquivo `README-Control-Center.md` para instruções detalhadas.*
 
-### Opção 1: Usando endpoints de teste
-
-#### Enviar um evento único:
-```bash
-POST /api/kafkatest/send-transaction-created-event
-Content-Type: application/json
-
-{
-  "transactionId": "00000000-0000-0000-0000-000000000001"
-}
-```
-
-#### Enviar múltiplos eventos:
-```bash
-POST /api/kafkatest/send-multiple-events/5
-```
-
-### Opção 2: Usando ferramentas do Kafka
-
-#### Produzir evento manualmente:
-```bash
-# Criar tópico (se necessário)
-kafka-topics --create --topic transaction-created --bootstrap-server localhost:9092
-
-# Enviar mensagem
-kafka-console-producer --topic transaction-created --bootstrap-server localhost:9092
-```
-
-Exemplo de mensagem JSON:
-```json
-{
-  "TransactionId": "123e4567-e89b-12d3-a456-426614174000",
-  "CreatedAt": "2025-07-04T10:30:00Z"
-}
-```
-
-### Opção 3: Através de transações reais
+### Através de transações reais
 
 Quando uma transação é criada no sistema e o método `Commit()` é chamado, automaticamente um evento será publicado no Kafka e consumido pelo consumer.
 
@@ -156,7 +120,7 @@ No método `ProcessTransactionCreatedEvent` em `KafkaConsumer.cs`, você pode ad
 
 ### Configurar Diferentes Tópicos
 
-Modifique a configuração `Kafka:Topics:TransactionCreated` no appsettings.json para usar diferentes tópicos por ambiente.
+Modifique a configuração `Kafka:Topics:Transactions` no appsettings.json para usar diferentes tópicos por ambiente.
 
 ### Ajustar Configurações do Consumer
 

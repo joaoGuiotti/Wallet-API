@@ -15,13 +15,11 @@ public class KafkaEventDispatcher : IDomainDispatcher
         _producer = producer;
     }
 
-    public async Task DispatchAsync(IEnumerable<IEvent> events, CancellationToken cancellationToken)
+    public async Task DispatchAsync(string topic, IEnumerable<IEvent> events, CancellationToken cancellationToken)
     {
         foreach (var @event in events)
         {
-            var topic = @event.GetType().Name;
             var message = JsonSerializer.Serialize(@event.GetPayload());
-
             await _producer.ProduceAsync(topic, message, cancellationToken);
         }
     }

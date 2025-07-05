@@ -46,7 +46,7 @@ public class CreateTransaction : ICreateTransaction
             await _transactionRepo.Create(transaction, cancellationToken);
         }, cancellationToken);
 
-        await _dispatcher.DispatchAsync(transaction.GetUncommittedEvents(), cancellationToken);
+        await _dispatcher.DispatchAsync("transactions", transaction.GetUncommittedEvents(), cancellationToken);
         transaction.ClearEvents();
 
         return TransactionModelOutput.FromTransaction(transaction);
