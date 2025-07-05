@@ -41,7 +41,7 @@ GET {{Wallet_HostAddress}}/Account/{{accountId}}
 Content-Type: application/json
 
 ### Consultar Balance Atualizado
-GET {{Wallet_HostAddress}}/Account/balances/{{accountId}}
+GET {{Wallet_HostAddress}}/Account/balance/{{accountId}}
 Content-Type: application/json
 
 ### Creditar Account
@@ -85,7 +85,7 @@ Content-Type: application/json
 # ===================================================
 # CONSULTAR BALANCE ATUALIZADO
 # ===================================================
-GET {{Wallet_HostAddress}}/Account/balances/00000000-0000-0000-0000-000000000001
+GET {{Wallet_HostAddress}}/Account/balance/00000000-0000-0000-0000-000000000001
 Content-Type: application/json
 
 

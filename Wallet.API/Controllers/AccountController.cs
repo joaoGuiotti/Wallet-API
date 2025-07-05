@@ -46,7 +46,7 @@ public class AccountController : ControllerBase
         return Ok(new ApiResponse<AccountModelOutput>(result));
     }
 
-    [HttpGet("Balances/{account_id}")]
+    [HttpGet("Balance/{account_id}")]
     [ProducesResponseType(typeof(ApiResponse<AccountModelOutput>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBalance([FromRoute] Guid account_id, CancellationToken cancellationToken)
