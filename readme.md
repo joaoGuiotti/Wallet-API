@@ -36,7 +36,7 @@ Uma API REST para gerenciamento de carteira digital construída com .NET 8, Enti
    - PostgreSQL (porta 5432)
    - Apache Kafka (porta 9092)
    - Zookeeper (porta 2181)
-   - Wallet API (porta 8080)
+   - Wallet API (porta 3003)
 
 3. **Verificar se os serviços estão rodando:**
    ```bash
@@ -44,8 +44,8 @@ Uma API REST para gerenciamento de carteira digital construída com .NET 8, Enti
    ```
 
 4. **Acessar a API:**
-   - API: http://localhost:8080
-   - Swagger UI: http://localhost:8080/swagger
+   - API: http://localhost:3003
+   - Swagger UI: http://localhost:3003/swagger
 
 ### Desenvolvimento Local
 
@@ -87,78 +87,21 @@ O projeto inclui um arquivo `Wallet.http` na raiz que contém exemplos de todas 
 #### Como usar:
 
 1. **Abra o arquivo `Wallet.http`**
-
-2. **Configure as variáveis (se necessário):**
    ```http
-   @baseUrl = http://localhost:8080
+   @baseUrl = http://localhost:3003
    @walletId = seu-wallet-id-aqui
    ```
 
-3. **Execute as requisições clicando em "Send Request":**
-
-   **Exemplo de requisições disponíveis:**
-   ```http
-   ### Criar uma nova carteira
-   POST {{baseUrl}}/api/wallets
-   Content-Type: application/json
-   
-   {
-     "userId": "user123",
-     "initialBalance": 1000.00
-   }
-   
-   ### Consultar saldo da carteira
-   GET {{baseUrl}}/api/wallets/{{walletId}}/balance
-   
-   ### Criar uma transação de débito
-   POST {{baseUrl}}/api/wallets/{{walletId}}/transactions
-   Content-Type: application/json
-   
-   {
-     "amount": 50.00,
-     "type": "Debit",
-     "description": "Compra no supermercado"
-   }
-   
-   ### Criar uma transação de crédito
-   POST {{baseUrl}}/api/wallets/{{walletId}}/transactions
-   Content-Type: application/json
-   
-   {
-     "amount": 200.00,
-     "type": "Credit",
-     "description": "Depósito"
-   }
-   
-   ### Listar transações da carteira
-   GET {{baseUrl}}/api/wallets/{{walletId}}/transactions?page=1&pageSize=10
-   ```
+2. **Execute as requisições clicando em "Send Request":**
 
 ### Usando Swagger UI
 
-1. **Acesse:** http://localhost:8080/swagger
+1. **Acesse:** http://localhost:3003/swagger
 
 2. **Teste diretamente na interface:**
    - Clique em "Try it out"
    - Preencha os parâmetros
    - Clique em "Execute"
-
-### Usando cURL
-
-```bash
-# Criar carteira
-curl -X POST http://localhost:8080/api/wallets \
-  -H "Content-Type: application/json" \
-  -d '{"userId": "user123", "initialBalance": 1000.00}'
-
-# Consultar saldo
-curl -X GET http://localhost:8080/api/wallets/{walletId}/balance
-
-# Criar transação
-curl -X POST http://localhost:8080/api/wallets/{walletId}/transactions \
-  -H "Content-Type: application/json" \
-  -d '{"amount": 50.00, "type": "Debit", "description": "Teste"}'
-```
 
 ## 📁 Estrutura do Projeto
 
@@ -173,44 +116,6 @@ Wallet/
 ├── Dockerfile               # Build da aplicação
 ├── Wallet.http             # Arquivo de testes HTTP
 └── README.md               # Este arquivo
-```
-
-## 🔧 Configuração
-
-### Variáveis de Ambiente
-
-Crie um arquivo `.env` na raiz do projeto:
-
-```env
-# Database
-POSTGRES_DB=walletdb
-POSTGRES_USER=wallet_user
-POSTGRES_PASSWORD=wallet_pass
-
-# Kafka
-KAFKA_BOOTSTRAP_SERVERS=localhost:9092
-
-# API
-ASPNETCORE_ENVIRONMENT=Development
-```
-
-### appsettings.json
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Port=5432;Database=walletdb;Username=wallet_user;Password=wallet_pass"
-  },
-  "Kafka": {
-    "BootstrapServers": "localhost:9092",
-    "Topics": {
-      "TransactionCreated": "transaction-created"
-    },
-    "ConsumerSettings": {
-      "GroupId": "wallet-consumer-group"
-    }
-  }
-}
 ```
 
 ## 🐛 Solução de Problemas
@@ -237,24 +142,12 @@ docker-compose restart zookeeper kafka
 ### Portas ocupadas
 ```bash
 # Verificar quais portas estão em uso
-netstat -tulpn | grep :8080
+netstat -tulpn | grep :3003
 netstat -tulpn | grep :5432
 
 # Parar todos os containers
 docker-compose down
 ```
-
-## 📚 Endpoints da API
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| POST | `/api/wallets` | Criar nova carteira |
-| GET | `/api/wallets/{id}` | Obter dados da carteira |
-| GET | `/api/wallets/{id}/balance` | Consultar saldo |
-| POST | `/api/wallets/{id}/transactions` | Criar transação |
-| GET | `/api/wallets/{id}/transactions` | Listar transações |
-| GET | `/api/transactions/{id}` | Obter transação específica |
-
 ## 🔄 Eventos Kafka
 
 A aplicação publica eventos no Kafka quando transações são criadas:
@@ -267,34 +160,11 @@ A aplicação publica eventos no Kafka quando transações são criadas:
 ```bash
 # Executar todos os testes
 dotnet test
-
-# Executar testes com cobertura
-dotnet test --collect:"XPlat Code Coverage"
-
-# Executar testes específicos
-dotnet test --filter "TestCategory=Unit"
 ```
 
 ## 📝 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 🤝 Contribuindo
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📞 Suporte
-
-Se você encontrar algum problema ou tiver dúvidas:
-
-1. Verifique a seção de [Solução de Problemas](#-solução-de-problemas)
-2. Consulte os logs com `docker-compose logs [service-name]`
-3. Abra uma issue no repositório
-
 ---
 
-**Desenvolvido com ❤️ usando .NET 8**
+**Desenvolvido usando .NET 8**
