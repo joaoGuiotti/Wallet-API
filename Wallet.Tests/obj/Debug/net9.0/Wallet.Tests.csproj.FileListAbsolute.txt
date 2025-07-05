@@ -284,3 +284,4 @@ C:\dev\Wallet\Wallet.Tests\obj\Debug\net9.0\refint\Wallet.Tests.dll
 C:\dev\Wallet\Wallet.Tests\obj\Debug\net9.0\Wallet.Tests.pdb
 C:\dev\Wallet\Wallet.Tests\obj\Debug\net9.0\Wallet.Tests.genruntimeconfig.cache
 C:\dev\Wallet\Wallet.Tests\obj\Debug\net9.0\ref\Wallet.Tests.dll
+C:\dev\Wallet\Wallet.Tests\obj\Debug\net9.0\Wallet.Tests.sourcelink.json

@@ -13,3 +13,4 @@ C:\dev\Wallet\Wallet.Application\obj\Debug\net8.0\Wallet.Application.dll
 C:\dev\Wallet\Wallet.Application\obj\Debug\net8.0\refint\Wallet.Application.dll
 C:\dev\Wallet\Wallet.Application\obj\Debug\net8.0\Wallet.Application.pdb
 C:\dev\Wallet\Wallet.Application\obj\Debug\net8.0\ref\Wallet.Application.dll
+C:\dev\Wallet\Wallet.Application\obj\Debug\net8.0\Wallet.Application.sourcelink.json

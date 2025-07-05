@@ -39,6 +39,7 @@ public class TransactionTests
         var accountTo = CreateAccount(50);
         float amount = 40;
         var transaction = new DomainEnity.Transaction(accountFrom, accountTo, amount);
+        transaction.Commit();
 
         // Assert
         Assert.Equal(60, accountFrom.Balance);
