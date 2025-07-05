@@ -1,6 +1,4 @@
-@endpoint = http://127.0.0.1
-@port = 8081
-@Wallet_HostAddress = http://127.0.0.1:8081
+@Wallet_HostAddress = http://127.0.0.1:3003
 
 GET {{Wallet_HostAddress}}/weatherforecast/
 Accept: application/json
