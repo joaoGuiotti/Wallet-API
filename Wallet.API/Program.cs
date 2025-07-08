@@ -7,22 +7,14 @@ using Wallet.Infrastructure.Persistence.Context;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services
-    .AddControllers(opt =>
-        opt.Filters.Add(typeof(ApiGlobalExceptionFilter))
-    );
-builder.Services
-    .Configure<RouteOptions>(opt =>
-        {
-            opt.LowercaseUrls = true;
-        });
+builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ApiGlobalExceptionFilter)));
+builder.Services.Configure<RouteOptions>(opt => { opt.LowercaseUrls = true; });
 
 builder.Services
     .ConfigureApplication()
     .ConfigureInfrastructure(builder.Configuration);
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
