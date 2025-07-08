@@ -11,7 +11,7 @@ Content-Type: application/json
 
 {
   "name": "Johnny",
-  "email": "johnny@email.com"
+  "email": "johnny1@email.com"
 }
 
 ###
@@ -34,9 +34,6 @@ Content-Type: application/json
 ###
 @accountId = {{createAccount.response.body.data.id}}
 
-### Buscar Account Por ID
-GET {{Wallet_HostAddress}}/Account/{{accountId}}
-Content-Type: application/json
 
 ### Consultar Balance Atualizado
 GET {{Wallet_HostAddress}}/Account/balance/{{accountId}}
