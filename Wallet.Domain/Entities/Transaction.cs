@@ -28,8 +28,13 @@ namespace Wallet.Domain.Entities
 
         public void Commit()
         {
+            if (AccountFrom.Balance - Amount < AccountFrom.GetNegativeLimit())
+                Notification.AddError(nameof(Transaction), "Account limit exceeded.");
+
             AccountFrom.Debit(Amount);
             AccountTo.Credit(Amount);
+
+            Validate();
 
             ApplyEvent(new TransactionCreatedEvent(Id, AccountFromId, AccountToId));
         }

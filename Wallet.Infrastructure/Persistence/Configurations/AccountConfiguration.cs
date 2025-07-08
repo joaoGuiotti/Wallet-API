@@ -13,6 +13,9 @@ namespace Wallet.Infrastructure.Persistence.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(a => a.Balance)
                 .IsRequired();
+            builder.Property(a => a.Limit)
+               .IsRequired()
+               .HasDefaultValue(0);
             builder.Property(a => a.ClientId)
                 .IsRequired();
             builder.Property(a => a.CreatedAt)

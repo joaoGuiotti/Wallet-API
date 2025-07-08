@@ -4,7 +4,7 @@ using Wallet.Domain.Shared;
 
 namespace Wallet.Domain.Validators;
 
-public class TransactionFluentValidator : Interfaces.IValidator<Transaction>
+public class TransactionValidator : Interfaces.IValidator<Transaction>
 {
     public void Validate(Transaction entity)
     {

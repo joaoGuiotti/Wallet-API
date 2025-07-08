@@ -7,6 +7,6 @@ public class TransactionValidatorFactory
 {
      public static Interfaces.IValidator<Transaction> Create()
     {
-        return new TransactionFluentValidator();
+        return new TransactionValidator();
     }
 }

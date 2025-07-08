@@ -46,8 +46,8 @@ namespace Wallet.Infrastructure.Persistence.Context
             };
 
             modelBuilder.Entity<Account>().HasData(
-                new { Id = account1.Id, ClientId = client1.Id, Balance = account1.Balance, CreatedAt = DateTimeOffset.UtcNow },
-                new { Id = account2.Id, ClientId = client2.Id, Balance = account2.Balance, CreatedAt = DateTimeOffset.UtcNow }
+                new { Id = account1.Id, ClientId = client1.Id, Balance = account1.Balance, Limit = 100f, CreatedAt = DateTimeOffset.UtcNow },
+                new { Id = account2.Id, ClientId = client2.Id, Balance = account2.Balance, limit = 0f, CreatedAt = DateTimeOffset.UtcNow }
             );
 
             // Seeds para Transaction (opcional, se quiser transações iniciais)

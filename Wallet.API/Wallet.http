@@ -70,7 +70,7 @@ Content-Type: application/json
 {
   "accountFromId": "00000000-0000-0000-0000-000000000001",
   "accountToId": "00000000-0000-0000-0000-000000000002",
-  "amount": 100
+  "amount": 1
 }
 
 ###

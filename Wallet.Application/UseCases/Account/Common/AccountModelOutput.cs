@@ -7,16 +7,19 @@ public class AccountModelOutput
     public Guid Id { get; set; }
     public Guid ClientId { get; set; }
     public float Balance { get; set; }
+    public float Limit { get; set; }
 
     public AccountModelOutput(
         Guid id,
         Guid clientId,
-        float balance
+        float balance,
+        float limit
     )
     {
         Id = id;
         ClientId = clientId;
         Balance = balance;
+        Limit = limit;
     }
 
     public static AccountModelOutput FromAccount(
@@ -24,7 +27,8 @@ public class AccountModelOutput
     ) => new(
             account.Id,
             account.ClientId,
-            account.Balance
+            account.Balance,
+            account.Limit
         );
 }
 
