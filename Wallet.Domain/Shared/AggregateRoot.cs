@@ -1,47 +1,40 @@
 ﻿using Wallet.Domain.Interfaces;
 
-namespace Wallet.Domain.Shared;
-
-public class AggregateRoot : Entity
+namespace Wallet.Domain.Shared
 {
-    private readonly HashSet<IEvent> _events = new();
-    private readonly HashSet<IEvent> _dispatchedEvents = new();
-    private readonly Dictionary<string, List<Action<IEvent>>> _handlers = new();
-
-    public IReadOnlyCollection<IEvent> Events
-        => _events.ToList().AsReadOnly();
-
-    protected AggregateRoot() : base() { }
-
-    public void ApplyEvent(IEvent @event)
+    public interface IAggreagateRoot
     {
-        _events.Add(@event);
-
-        var eventName = @event.GetType().Name;
-
-        if (_handlers.TryGetValue(eventName, out var handlers))
-            foreach (var handler in handlers)
-                handler(@event);
+        IReadOnlyCollection<IDomainEvent> Events { get; }
+        void ApplyEvent(IDomainEvent @event);
+        void ClearEvents();
+        IReadOnlyCollection<IDomainEvent> PopEvents();
     }
 
-    public void RegisterHandler<TEvent>(Action<TEvent> handler) where TEvent : IEvent
+    public class AggregateRoot : Entity , IAggreagateRoot
     {
-        var eventName = typeof(TEvent).Name;
+        private readonly HashSet<IDomainEvent> _events = new();
+        public IReadOnlyCollection<IDomainEvent> Events
+            => _events.ToList().AsReadOnly();
 
-        if (!_handlers.ContainsKey(eventName))
-            _handlers[eventName] = new List<Action<IEvent>>();
-        _handlers[eventName].Add(e => handler((TEvent)e));
-    }
+        protected AggregateRoot() : base() { }
 
-    public void MarkEventAsDispatcher(IEvent @event)
-        => _dispatchedEvents.Add(@event);
+        public void ApplyEvent(IDomainEvent @event)
+        {
+            if (@event == null)
+                throw new ArgumentNullException(nameof(@event), "Event cannot be null.");
+            _events.Add(@event);
+        }
 
-    public IReadOnlyCollection<IEvent> GetUncommittedEvents()
-        => _events.Except(_dispatchedEvents).ToList().AsReadOnly();
+        public void ClearEvents()
+        {
+            _events.Clear();
+        }
 
-    public void ClearEvents()
-    {
-        _events.Clear();
-        _dispatchedEvents.Clear();
+        public IReadOnlyCollection<IDomainEvent> PopEvents()
+        {
+            var events = _events.ToList();
+            _events.Clear();
+            return events.AsReadOnly();
+        }
     }
 }

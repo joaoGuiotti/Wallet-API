@@ -5,5 +5,5 @@ namespace Wallet.Application.Interfaces.Events;
 
 public interface IDomainDispatcher
 {
-    Task DispatchAsync(string topic, IEnumerable<IEvent> events, CancellationToken cancellationToken);
+    Task DispatchAsync(string topic, IEnumerable<IDomainEvent> events, CancellationToken cancellationToken);
 }

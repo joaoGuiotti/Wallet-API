@@ -1,3 +1,5 @@
+using System.Reflection;
+using MediatR;
 using Wallet.API.Filters;
 using Wallet.Infrastructure;
 using Wallet.Infrastructure.Persistence.Context;
@@ -18,6 +20,9 @@ builder.Services
 builder.Services
     .ConfigureApplication()
     .ConfigureInfrastructure(builder.Configuration);
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

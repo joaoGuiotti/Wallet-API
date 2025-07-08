@@ -3,7 +3,6 @@ using Wallet.Application.Interfaces.Repositories;
 using Wallet.Application.UseCases.Transaction.Common;
 using DomainEntity = Wallet.Domain.Entities;
 using Wallet.Domain.Interfaces;
-using Wallet.Application.Interfaces.Events;
 
 namespace Wallet.Application.UseCases.Transaction.CreateTransaction;
 
@@ -13,7 +12,7 @@ public class CreateTransaction : ICreateTransaction
         ITransactionRepository transactionRepo,
         IAccountRepository accountRepo,
         IUnitOfWork unitOfWork,
-        IDomainDispatcher dispatcher
+        IDomainEventDispatcher dispatcher
     )
     {
         _transactionRepo = transactionRepo;
@@ -25,7 +24,7 @@ public class CreateTransaction : ICreateTransaction
     private readonly ITransactionRepository _transactionRepo;
     private readonly IAccountRepository _accountRepo;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IDomainDispatcher _dispatcher;
+    private readonly IDomainEventDispatcher _dispatcher;
 
     public async Task<TransactionModelOutput> Handle(CreateTransactionInput request, CancellationToken cancellationToken)
     {
@@ -46,8 +45,7 @@ public class CreateTransaction : ICreateTransaction
             await _transactionRepo.Create(transaction, cancellationToken);
         }, cancellationToken);
 
-        await _dispatcher.DispatchAsync("transactions", transaction.GetUncommittedEvents(), cancellationToken);
-        transaction.ClearEvents();
+        await _dispatcher.DispatchAsync(transaction.PopEvents(), cancellationToken);
 
         return TransactionModelOutput.FromTransaction(transaction);
     }

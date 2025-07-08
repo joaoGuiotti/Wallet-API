@@ -2,8 +2,8 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using Wallet.Application.Events.Transaction;
 using Wallet.Application.Kafka;
-using Wallet.Domain.Events;
 
 namespace Wallet.Infrastructure.Kafka;
 
@@ -82,12 +82,12 @@ public class KafkaConsumer : IKafkaConsumer, IDisposable
         {
             _logger.LogInformation($"Received message: {message}");
 
-            var transactionEvent = JsonSerializer.Deserialize<TransactionCreatedEvent>(message);
+            var transactionEvent = JsonSerializer.Deserialize<TransactionCreatedIntegrationEvent>(message);
             
             if (transactionEvent != null)
             {
                 _logger.LogInformation($"Processing TransactionCreatedEvent for Transaction ID: {transactionEvent.TransactionId}");
-                
+
                 await ProcessTransactionCreatedEvent(transactionEvent);
             }
             else
@@ -105,7 +105,7 @@ public class KafkaConsumer : IKafkaConsumer, IDisposable
         }
     }
 
-    private Task ProcessTransactionCreatedEvent(TransactionCreatedEvent transactionEvent)
+    private Task ProcessTransactionCreatedEvent(TransactionCreatedIntegrationEvent transactionEvent)
     {
         _logger.LogInformation($"🎉 Transaction {transactionEvent.TransactionId} was created successfully!");
         _logger.LogInformation($"Event timestamp: {DateTime.UtcNow}");

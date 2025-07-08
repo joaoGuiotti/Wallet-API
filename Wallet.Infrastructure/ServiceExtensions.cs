@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Wallet.Application.Interfaces.Events;
 using Wallet.Application.Interfaces.Repositories;
 using Wallet.Application.Kafka;
 using Wallet.Domain.Interfaces;
-using Wallet.Infrastructure.Events;
 using Wallet.Infrastructure.Kafka;
 using Wallet.Infrastructure.Persistence.Context;
 using Wallet.Infrastructure.Repositories;
@@ -21,23 +21,28 @@ public static class ServiceExtensions
 
         services.AddDbContext<WalletDbContext>(options => options.UseMySql(
                 connectionString,
-                new MySqlServerVersion(new Version(8, 0, 36)) 
+                new MySqlServerVersion(new Version(8, 0, 36))
             ));
-        
+
         // Repositories
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IClientRepository, ClientRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<ITransactionRepository, TransactionRepository>();
 
-        // Kafka
-        services.AddScoped<IKafkaProducer, KafkaProducer>();
+        // Register KafkaIntegrationEventPublisher
+        services.AddSingleton<IIntegrationEventPublisher>(sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<KafkaIntegrationEventPublisher>>();
+            return new KafkaIntegrationEventPublisher(configuration, logger);
+        });
+
+        services.AddScoped<IIntegrationEventPublisher, KafkaIntegrationEventPublisher>();
         services.AddScoped<IKafkaConsumer, KafkaConsumer>();
-        services.AddScoped<IDomainDispatcher, KafkaEventDispatcher>();
-        
+
         // Background Services
         services.AddHostedService<KafkaConsumerBackgroundService>();
-        
+
         return services;
     }
 

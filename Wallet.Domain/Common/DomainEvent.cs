@@ -3,10 +3,16 @@ using Wallet.Domain.Interfaces;
 
 namespace Wallet.Domain.Common;
 
-public class DomainEvent : IEvent
+public class DomainEvent : IDomainEvent
 {
     public DateTime OccuredAt => DateTime.Now;
 
-    public virtual object GetPayload() => this;
+    public string AggregateType { get; set; }
 
+    public object GetPayload() => this;
+
+    protected DomainEvent()
+    {
+        
+    }
 }

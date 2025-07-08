@@ -1,4 +1,4 @@
-﻿using Wallet.Domain.Events;
+﻿using Wallet.Domain.Events.Transaction;
 using Wallet.Domain.Factories;
 using Wallet.Domain.Shared;
 
@@ -17,8 +17,6 @@ namespace Wallet.Domain.Entities
 
         public Transaction(Account accountFrom, Account accountTo, float ammount) : base()
         {
-            RegisterHandler<TransactionCreatedEvent>(OnTransactionCreated);
-
             AccountFrom = accountFrom;
             AccountFromId = accountFrom.Id;
             AccountTo = accountTo;
@@ -32,18 +30,13 @@ namespace Wallet.Domain.Entities
         {
             AccountFrom.Debit(Amount);
             AccountTo.Credit(Amount);
-            
-            ApplyEvent(new TransactionCreatedEvent(Id));
+
+            ApplyEvent(new TransactionCreatedEvent(Id, AccountFromId, AccountToId));
         }
 
         public void Validate()
         {
             TransactionValidatorFactory.Create().Validate(this);
-        }
-
-        private void OnTransactionCreated(TransactionCreatedEvent @event)
-        {
-            Console.WriteLine($" =========================> Transaction {@event.TransactionId} was created and handled locally.");
         }
     }
 }
