@@ -1,10 +1,10 @@
-using System;
 using Wallet.Domain.Entities;
-using Wallet.Domain.Interfaces;
+using Wallet.Domain.Repository;
 
 namespace Wallet.Application.Interfaces.Repositories;
 
-public interface ITransactionRepository : IRepository<Transaction>
+public interface ITransactionRepository 
+    : IRepository<Transaction>, ISearchableRepository<Transaction>
 {
 
 }

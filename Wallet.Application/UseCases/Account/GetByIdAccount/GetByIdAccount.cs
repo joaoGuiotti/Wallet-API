@@ -1,11 +1,12 @@
 using System;
+using Wallet.Application.Abstractions;
 using Wallet.Application.Exceptions;
 using Wallet.Application.Interfaces.Repositories;
 using Wallet.Application.UseCases.Account.Common;
 
 namespace Wallet.Application.UseCases.Account.GetByIdAccount;
 
-public class GetByIdAccount : IGetByIdAccount
+public class GetByIdAccount : UseCaseBase<GetByIdAccountInput, AccountModelOutput>
 {
     private readonly IAccountRepository _accountRepo;
 
@@ -15,7 +16,7 @@ public class GetByIdAccount : IGetByIdAccount
     {
         _accountRepo = repo;
     }
-    public async Task<AccountModelOutput> Handle(GetByIdAccountInput request, CancellationToken cancellationToken)
+    public override async Task<AccountModelOutput> Handle(GetByIdAccountInput request, CancellationToken cancellationToken)
     {
         var account = await _accountRepo.Find(request.accountId, cancellationToken);
         NotFoundException.ThrowIfNull(account, $"{nameof(Account)} {request.accountId} is not Found");

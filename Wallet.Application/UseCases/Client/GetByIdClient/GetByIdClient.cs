@@ -6,7 +6,7 @@ using Wallet.Application.UseCases.Client.Common;
 
 namespace Wallet.Application.UseCases.Client.GetByIdClient;
 
-public class GetByIdClient : IGetByIdClient
+public class GetByIdClient : UseCaseBase<GetByIdClientInput, ClientModelOutput>
 {
     private readonly IClientRepository _repository;
 
@@ -15,7 +15,7 @@ public class GetByIdClient : IGetByIdClient
         _repository = repository;
     }
 
-    public async Task<ClientModelOutput> Handle(GetByIdClientInput request, CancellationToken cancelationToken)
+    public override async Task<ClientModelOutput> Handle(GetByIdClientInput request, CancellationToken cancelationToken)
     {
         var client = await _repository.Find(request.ClientId, cancelationToken);
         return ClientModelOutput.FromClient(client!);

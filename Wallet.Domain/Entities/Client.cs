@@ -8,6 +8,11 @@ namespace Wallet.Domain.Entities {
         public string Email { get; set; } = null!;
         public ICollection<Account> Accounts { get; private set; } = new List<Account>();
 
+        public Client()
+        {
+            
+        }
+
         public Client(string name, string email) : base()
         {
             Name = name;

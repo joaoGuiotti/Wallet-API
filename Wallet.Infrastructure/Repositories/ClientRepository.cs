@@ -2,6 +2,7 @@
 using Wallet.Application.Exceptions;
 using Wallet.Application.Interfaces.Repositories;
 using Wallet.Domain.Entities;
+using Wallet.Domain.Repository;
 using Wallet.Infrastructure.Persistence.Context;
 
 namespace Wallet.Infrastructure.Repositories
@@ -35,5 +36,38 @@ namespace Wallet.Infrastructure.Repositories
 
         public Task Update(Client entity, CancellationToken cancellationToken)
             => Task.FromResult(_context.Clients.Update(entity));
+       
+        public async Task<SearchOutput<Client>> SearchAsync(SearchInput input, CancellationToken cancellationToken)
+        {
+           var query = _context.Clients.AsNoTracking();
+            if (!string.IsNullOrWhiteSpace(input.SearchTerm))
+            {
+                query = query.Where(c => c.Name.Contains(input.SearchTerm) || c.Email.Contains(input.SearchTerm));
+            }
+            query = AddOrderToQuery(query, input.OrderBy, input.Order);
+            var totalCount = await query.CountAsync(cancellationToken);
+            var items = await query.Skip((input.Page - 1) * input.PerPage)
+                             .Take(input.PerPage)
+                             .ToListAsync(cancellationToken);
+
+            return new SearchOutput<Client>(
+                input.Page,
+                input.PerPage,
+                totalCount,
+                items
+            );
+        }
+
+        private IQueryable<Client> AddOrderToQuery(IQueryable<Client> query, string orderBy, ESearchOrder order)
+        {
+            return (orderBy.ToLower(), order) switch
+            {
+                ("name", ESearchOrder.Asc) => query.OrderBy(c => c.Name),
+                ("name", ESearchOrder.Desc) => query.OrderByDescending(c => c.Name),
+                ("email", ESearchOrder.Asc) => query.OrderBy(c => c.Email),
+                ("email", ESearchOrder.Desc) => query.OrderByDescending(c => c.Email),
+                _ => query.OrderByDescending(c => c.CreatedAt)
+            };
+        }
     }
 }

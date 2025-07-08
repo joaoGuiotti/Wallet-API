@@ -5,7 +5,7 @@ using Wallet.Domain.Interfaces;
 
 namespace Wallet.Application.UseCases.Account.CreateAccount
 {
-    public class CreateAccount : ICreateAccount
+    public class CreateAccount : UseCaseBase<CreateAccountInput, AccountModelOutput>
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IClientRepository _clientRepository;
@@ -22,7 +22,7 @@ namespace Wallet.Application.UseCases.Account.CreateAccount
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<AccountModelOutput> Handle(CreateAccountInput request, CancellationToken cancelationToken = default)
+        public override async Task<AccountModelOutput> Handle(CreateAccountInput request, CancellationToken cancelationToken = default)
         {
             var client = await _clientRepository.Find(request.clientId, cancelationToken);
             if (client == null)

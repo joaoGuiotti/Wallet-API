@@ -1,10 +1,11 @@
+using Wallet.Application.Abstractions;
 using Wallet.Application.Interfaces.Repositories;
 using Wallet.Application.UseCases.Account.Common;
 using Wallet.Domain.Interfaces;
 
 namespace Wallet.Application.UseCases.Account.DebitAccount;
 
-public class DebitAccount : IDebitAccount
+public class DebitAccount : UseCaseBase<DebitAccountInput, AccountModelOutput>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -18,7 +19,7 @@ public class DebitAccount : IDebitAccount
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<AccountModelOutput> Handle(DebitAccountInput request, CancellationToken cancelationToken)
+    public override async Task<AccountModelOutput> Handle(DebitAccountInput request, CancellationToken cancelationToken)
     {
         var account = await _accountRepository.Find(request.accountId, cancelationToken);
         if (account is null)

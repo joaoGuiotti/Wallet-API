@@ -1,11 +1,12 @@
 ﻿
 namespace Wallet.Application.UseCases.Client.CreateClient;
 
+using Wallet.Application.Abstractions;
 using Wallet.Application.Interfaces.Repositories;
 using Wallet.Application.UseCases.Client.Common;
 using Wallet.Domain.Entities;
 using Wallet.Domain.Interfaces;
-public class CreateClient : ICreateClient
+public class CreateClient : UseCaseBase<CreateClientInput, ClientModelOutput>
 {
     private readonly IClientRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
@@ -16,7 +17,7 @@ public class CreateClient : ICreateClient
         _unitOfWork = uow;
     }
 
-    public async Task<ClientModelOutput> Handle(CreateClientInput request, CancellationToken cancelationToken = default)
+    public override async Task<ClientModelOutput> Handle(CreateClientInput request, CancellationToken cancelationToken = default)
     {
         if (await _repository.ExistsByEmailAsync(request.Email, cancelationToken))
         {

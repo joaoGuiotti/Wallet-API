@@ -3,10 +3,11 @@ using Wallet.Application.Interfaces.Repositories;
 using Wallet.Application.UseCases.Transaction.Common;
 using DomainEntity = Wallet.Domain.Entities;
 using Wallet.Domain.Interfaces;
+using Wallet.Application.Abstractions;
 
 namespace Wallet.Application.UseCases.Transaction.CreateTransaction;
 
-public class CreateTransaction : ICreateTransaction
+public class CreateTransaction : UseCaseBase<CreateTransactionInput, TransactionModelOutput>
 {
     public CreateTransaction(
         ITransactionRepository transactionRepo,
@@ -26,7 +27,7 @@ public class CreateTransaction : ICreateTransaction
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDomainEventDispatcher _dispatcher;
 
-    public async Task<TransactionModelOutput> Handle(CreateTransactionInput request, CancellationToken cancellationToken)
+    public override async Task<TransactionModelOutput> Handle(CreateTransactionInput request, CancellationToken cancellationToken)
     {
         var accountFrom = await _accountRepo.Find(request.AccountFromId, cancellationToken);
         NotFoundException.ThrowIfNull(accountFrom, $"AccountFrom {request.AccountFromId} not found.");

@@ -1,14 +1,18 @@
 ﻿using MediatR;
+using Wallet.Application.Common;
+using Wallet.Domain.Repository;
 
-namespace Wallet.Application.UseCases.Account.GetAllAccount
+namespace Wallet.Application.UseCases.Account.ListAccount
 {
-    public class  ListAccountInput: IRequest
+    public sealed class ListAccountInput
+        : PaginatedListInput, IRequest<ListAccountOutput>
     {
-        public string Search { get; set; }
+        public ListAccountInput(int page, int perPage, string searchTerm, string sort, ESearchOrder dir)
+            : base(page, perPage, searchTerm, sort, dir)
+        { }
 
-        public ListAccountInput(string search = "")
-        {
-            Search = search;
-        }
+        public ListAccountInput() : base()
+        { }
+
     }
 }

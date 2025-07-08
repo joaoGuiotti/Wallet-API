@@ -1,10 +1,11 @@
+using Wallet.Application.Abstractions;
 using Wallet.Application.Interfaces.Repositories;
 using Wallet.Application.UseCases.Account.Common;
 using Wallet.Domain.Interfaces;
 
 namespace Wallet.Application.UseCases.Account.CreditAccount;
 
-public class CreditAccount : ICreditAccount
+public class CreditAccount : UseCaseBase<CreditAccountInput, AccountModelOutput>
 {
     public CreditAccount(
         IAccountRepository accountRepository,
@@ -18,7 +19,7 @@ public class CreditAccount : ICreditAccount
     private readonly IAccountRepository _accountRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public async Task<AccountModelOutput> Handle(CreditAccountInput request, CancellationToken cancellationToken)
+    public override async Task<AccountModelOutput> Handle(CreditAccountInput request, CancellationToken cancellationToken)
     {
         var account = await _accountRepository.Find(request.accountId, cancellationToken);
 
