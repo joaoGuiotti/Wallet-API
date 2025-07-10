@@ -40,8 +40,8 @@ public class CreateTransaction : UseCaseBase<CreateTransactionInput, Transaction
 
         await _unitOfWork.DoAsync(async uow =>
         {
-            await _accountRepo.Update(transaction.AccountFrom, cancellationToken);
-            await _accountRepo.Update(transaction.AccountTo, cancellationToken);
+            await _accountRepo.Update(transaction.AccountFrom!, cancellationToken);
+            await _accountRepo.Update(transaction.AccountTo!, cancellationToken);
 
             await _transactionRepo.Create(transaction, cancellationToken);
         }, cancellationToken);

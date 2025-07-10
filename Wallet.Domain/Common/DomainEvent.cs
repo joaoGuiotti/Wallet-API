@@ -7,8 +7,6 @@ public class DomainEvent : IDomainEvent
 {
     public DateTime OccuredAt => DateTime.Now;
 
-    public string AggregateType { get; set; }
-
     public object GetPayload() => this;
 
     protected DomainEvent()

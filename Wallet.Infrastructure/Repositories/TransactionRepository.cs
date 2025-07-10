@@ -39,6 +39,7 @@ public class TransactionRepository : ITransactionRepository
         var transaction = await _transactions
             .Include(t => t.AccountFrom)
             .Include(t => t.AccountTo)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(t => t.Id.Equals(id), cancelationToken);
         NotFoundException.ThrowIfNull(transaction, $"{nameof(Transaction)} {id} not found.");
         return transaction;
@@ -52,6 +53,7 @@ public class TransactionRepository : ITransactionRepository
         var query = _transactions
              .Include(t => t.AccountFrom)
              .Include(t => t.AccountTo)
+             .AsSplitQuery()
              .AsNoTracking();
         query = AddOrderToQuery(query, input.OrderBy, input.Order);
         var totalCount = await query.CountAsync(cancellationToken);

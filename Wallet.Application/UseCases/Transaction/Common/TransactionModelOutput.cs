@@ -25,8 +25,8 @@ public class TransactionModelOutput
     public static TransactionModelOutput FromTransaction(DomainEntity.Transaction e)
         => new(
             e.Id,
-            e.AccountFrom.Id,
-            e.AccountTo.Id,
+            e.AccountFrom!.Id,
+            e.AccountTo!.Id,
             e.Amount
         );
 }

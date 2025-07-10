@@ -6,9 +6,9 @@ namespace Wallet.Domain.Entities
 {
     public class Transaction : AggregateRoot
     {
-        public Account AccountFrom { get; private set; }
+        public Account? AccountFrom { get; private set; }
         public Guid AccountFromId { get; private set; }
-        public Account AccountTo { get; private set; }
+        public Account? AccountTo { get; private set; }
         public Guid AccountToId { get; private set; }
         public float Amount { get; private set; }
 
@@ -28,11 +28,11 @@ namespace Wallet.Domain.Entities
 
         public void Commit()
         {
-            if (AccountFrom.Balance - Amount < AccountFrom.GetNegativeLimit())
+            if (AccountFrom!.Balance - Amount < AccountFrom.GetNegativeLimit())
                 Notification.AddError(nameof(Transaction), "Account limit exceeded.");
 
             AccountFrom.Debit(Amount);
-            AccountTo.Credit(Amount);
+            AccountTo!.Credit(Amount);
 
             Validate();
 
