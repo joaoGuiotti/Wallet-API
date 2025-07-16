@@ -107,4 +107,14 @@ public class ClientTests
         });
         Assert.Equal("Client: Account does not belong to client", error.Message);
     }
+
+    [Fact]
+    public void RemoveAccount_ShouldRemoveAccountFromList()
+    {
+        var client = new Client("Name", "email@email.com");
+        var account = new Account(client, 100);
+        client.AddAccount(account);
+        client.RemoveAccount(account);
+        Assert.DoesNotContain(account, client.Accounts);
+    }
 }

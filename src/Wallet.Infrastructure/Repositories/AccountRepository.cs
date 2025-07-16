@@ -75,5 +75,6 @@ namespace Wallet.Infrastructure.Repositories
                 _ => query.OrderByDescending(x => x.CreatedAt)
                     .ThenBy(x => x.Id)
             };
+
     }
 }

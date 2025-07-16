@@ -79,9 +79,10 @@ services:
       start_period: 30s
 
   wallet-api:
-    build:
-      context: .
-      dockerfile: Wallet.API/Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Wallet.API/Dockerfile
+    image: joaoguiotti012/wallet-api:latest
     container_name: wallet-api
     networks:
       - wallet-network

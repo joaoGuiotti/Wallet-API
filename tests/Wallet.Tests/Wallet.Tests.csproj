@@ -26,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Wallet.Application\Wallet.Application.csproj" />
-    <ProjectReference Include="..\Wallet.Domain\Wallet.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Wallet.Application\Wallet.Application.csproj" />
+    <ProjectReference Include="..\..\src\Wallet.Domain\Wallet.Domain.csproj" />
   </ItemGroup>
 
 </Project>
